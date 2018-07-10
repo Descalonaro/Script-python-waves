@@ -15,7 +15,7 @@ if (len(sys.argv) > 1 ):
 	# Inicializo parametros (direccion y token a enviar)
 	myAddress = pywaves.Address(privateKey=""+privKey+"")
 	myToken = pywaves.Asset("AFUG6HXViGfAnobd41H1sAeASUEmjF7dHsgt5K1XFcfM")
-	waves = pywaves.
+	
 
 	print("\n- Se esta usando su cuenta:")
 	print(myAddress)	
@@ -31,19 +31,39 @@ if (len(sys.argv) > 1 ):
 	print(reg)
 
 
+	transfersToken = []
+	transfersWaves = []
+
 	for row in direcciones:
 		print(row)
 		direccion,teftok,waves,texto = row # Parametros de cada fila
 		destinoAddress = pywaves.Address(direccion) # Formato destino
 		
 		# Enviar tokens a cada direccion de forma individualizada
-		myAddress.sendAsset(recipient=destinoAddress, asset=myToken, amount=int(teftok), attachment=texto)
+		#myAddress.sendAsset(recipient=destinoAddress, asset=myToken, amount=int(teftok), attachment=texto)
 
-		# Enviar waves de forma masiva
+		# Para enviar waves de forma masiva
+		transfersWaves.append({'recipient':direccion, 'amount': int(waves)}) # Se crea el transfer masivo para waves
+
+		# Para enviar tokens de forma masiva
+		transfersToken.append({'recipient':direccion, 'amount': int(teftok)}) # Se crea el transfer masivo para tokens
 		
 
-		# Enviar tokens de forma masiva
-		# ----
+	print(transfersToken)
+	print(transfersWaves)
+
+	print(type(transfersToken))
+	print(type(transfersWaves))	
+
+	print("\n- Transaccion masiva de Token TEFTOK")
+	myAddress.massTransferAssets(transfersToken, myToken, texto,0) # No funciona
+	#pywaves.Address.massTransferAssets(myAddress, transfersToken, myToken)
+	#print("\nTransaccion realizada")
+
+	#print("\nTransaccion masiva de WAVES")
+	#myAddress.massTransferWaves(transfersWaves,"Envio masivo de Waves")
+	#print("\nTransaccion realizada")
+
 
 else:
 
